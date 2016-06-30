@@ -1,0 +1,131 @@
+%{
+int yystopparse=0;
+%}
+
+%token include
+%token librerias 
+%token MAIN
+%token id 
+%token entero 
+%token flotante
+%token booleano 
+%token caracter
+%token tipo_entero 
+%token tipo_flotante 
+%token tipo_booleano 
+%token tipo_caracter
+%token igual
+%token suma 
+%token resta
+%token multiplicacion 
+%token division 
+%token aumentar
+%token disminuir 
+%token mayor
+%token menor
+%token igualigual 
+%token mayorigual 
+%token menorigual
+%token distinto
+%token si 
+%token no 
+%token sino
+%token para 
+%token mientras
+%token hacer
+%token retorno
+
+%start PROGRAMA
+
+%%
+
+PROGRAMA		:  CABECERA PRINCIPAL FUNCIONES | CABECERA FUNCIONES PRINCIPAL | CABECERA PRINCIPAL | CABECERA ;
+
+CABECERA		: include librerias;
+
+PRINCIPAL		: TIPORETORNO MAIN '(' PARAMETROSIN ')' '{' LINEASCODIGOS '}';
+
+LINEASCODIGOS		: LINEACODIGO | LINEACODIGO INCREDISMIVARIABLE ';' | LINEACODIGO retorno VALOR ';' | retorno VALOR ';' |;
+
+LINEACODIGO		: LINEACODIGO  LINEA | LINEA ;
+
+LINEA			: INVOCARFUNCION ';' | CREARVARIABLE ';' | CAMBIARVALOR ';' | BUCLECONDICION;
+
+INVOCARFUNCION		: id '(' PARAMETROSENVIO ')';
+
+PARAMETROSENVIO		: PARENVIO |;
+
+PARENVIO		: PARENVIO ',' PENVIO | PENVIO;
+
+PENVIO			: VALOR | id;
+
+VALOR			: entero | flotante | booleano | caracter;
+
+CREARVARIABLE		: TIPODATO id | TIPODATO id ASIGNARVALOR | ARREGLO ;
+
+ARREGLO			: TIPODATO '[' entero ']' id | TIPODATO id '[' entero ']' ; 
+
+TIPODATO		: tipo_entero | tipo_flotante | tipo_booleano | tipo_caracter;
+
+ASIGNARVALOR		: igual OPERASIGNACION | igual VALOR | igual id;
+
+OPERASIGNACION		: ARITMETICO | INVOCARFUNCION | INCREDISMIVARIABLE;
+
+ARITMETICO		: OPRCOMUN | OPRCOMUN OPRCOMPLEMENTO;
+
+OPRCOMUN		: VALOR TIPOOPR VALOR | VALOR TIPOOPR id | id TIPOOPR VALOR | id TIPOOPR id
+
+TIPOOPR 		: suma | resta | multiplicacion | division;
+
+OPRCOMPLEMENTO		: OPRCOMPLEMENTO OPRCOM | OPRCOM;
+
+OPRCOM			: TIPOOPR VALOR | TIPOOPR id;
+
+INCREDISMIVARIABLE	: id INDIS;
+
+INDIS			: aumentar | disminuir;
+
+CAMBIARVALOR		: id igual CAMBVALOR;
+
+CAMBVALOR		: VALOR | OPERASIGNACION | id;
+
+BUCLECONDICION		: CONDICIONIF | BUCLEFOR | BUCLEWHILE | BUCLEDOWHILE;
+
+CONDICIONIF		: CONDICIONSI | CONDICIONSI CONDICIONNO | CONDICIONSI CONDICIONESSINO CONDICIONNO;
+
+
+CONDICIONSI		: si '(' CONDICION ')' '{' LINEASCODIGOS '}';
+
+CONDICION		: VALOR OPRCONDICION VALOR | VALOR OPRCONDICION	| id | id OPRCONDICION	 VALOR | id OPRCONDICION id;
+
+OPRCONDICION		: mayor | menor | igualigual | mayorigual | menorigual | distinto;
+
+CONDICIONNO		: no '{' LINEASCODIGOS '}';
+
+CONDICIONESSINO		: CONDICIONESSINO CONDICIONSINO | CONDICIONSINO;
+
+CONDICIONSINO		: sino '(' CONDICION ')' '{' LINEASCODIGOS '}';
+
+BUCLEFOR		: para '(' INICIAFOR ';' CONDICION ';' INCREDISMIVARIABLE ')' '{' LINEASCODIGOS '}' ;
+
+INICIAFOR		: TIPODATO id ASIGNARVALOR;
+
+BUCLEWHILE		: mientras '(' CONDICION ')' '{' LINEASCODIGOS '}';
+
+BUCLEDOWHILE		: hacer '{' LINEASCODIGOS '}' '(' CONDICION ')' ;
+
+FUNCIONES		: FUNCIONES FUNCION | FUNCION;
+
+FUNCION			: TIPORETORNO id '(' PARAMETROSIN ')' '{' LINEASCODIGOS '}';
+
+TIPORETORNO		: TIPODATO | ;
+
+PARAMETROSIN		: PARAMETROS | ;
+
+PARAMETROS		: PARAMETROS ',' PARAMETRO | PARAMETRO;
+
+PARAMETRO		: TIPODATO id | ARREGLO ;
+
+
+%%
+
