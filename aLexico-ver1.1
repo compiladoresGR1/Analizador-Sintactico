@@ -1,0 +1,83 @@
+%{
+#include <stdio.h>
+#include "asintactico1.tab.h"
+int bandera =0;
+%}
+
+%option noyywrap
+%option yylineno
+
+ignorar " "|\t|\n
+digito [0-9]
+ID [a-z][a-zA-Z0-9_$]*
+caracter [\'].[\']
+
+%%
+{ignorar}*              {;}
+return			{return retorno;}
+"."			{return '.';}
+","			{return ',';}
+";"			{return ';';}
+"("			{return '(';}
+")"			{return ')';}
+"["			{return '[';}
+"]"			{return ']';}
+"{"			{return '{';}
+"}"			{return '}';}
+#include		{return include;}
+[<][a-z]+\.h[>]	|
+[\"][a-z]+\.h[\"]	{return librerias;}		
+if			{return si;}
+"else if"		{return sino;}
+else			{return no;}
+for			{return para;}
+while			{return mientras;}
+do			{return hacer;}
+main			{return MAIN;}
+int			{return tipo_entero;}
+float			{return tipo_flotante;}
+char			{return tipo_caracter;}
+bool			{return tipo_booleano;}
+"+"			{return suma;}
+"-"			{return resta;}
+"*"			{return multiplicacion;}
+"/"			{return division;}
+"++"			{return aumentar;}
+"--"			{return disminuir;}
+"="			{return igual;}
+">"			{return mayor;}
+"<"			{return menor;}
+"=="			{return igualigual;}
+">="			{return mayorigual;}
+"<="			{return menorigual;}
+"!="			{return distinto;}
+{digito}+		{return entero;}
+{digito}"."{digito}+	{return flotante;}
+{caracter}		{return caracter;}
+true	|
+false			{return booleano;}
+{ID}			{return id;}
+.			{printf("ERROR de : %s en linea: %d \n",yytext, yylineno);
+			bandera=1;}
+
+
+%%
+yyerror(char * msg){
+printf("%s en %d\n ",msg,yylineno);
+}
+
+int main(void){
+
+yyin=fopen("entrada.txt","rt");
+
+if(yyin==NULL){
+printf("no se pudo abrir el archivo");
+}else{
+
+if(!yyparse() && bandera==0 ){
+printf("\n se compilo correctamente\n");
+}
+}
+fclose(yyin);
+}
+
