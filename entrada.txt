@@ -1,0 +1,20 @@
+# Analizador-Sintactico
+#include <stdio.h>
+
+int main(){
+	int a;
+	a=0;
+	if(a<=3){
+	for(int i=0;i<=10;i++){
+	int b=10;
+	while(a<b){
+	printf(1);
+	a++;
+	}
+	}
+	}
+}
+
+int hola(int [1] x ){
+return 1;
+}
