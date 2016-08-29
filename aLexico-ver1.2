@@ -58,7 +58,7 @@ main					{return MAIN;}
 {numero}+"."{numero}			{yylval.entero = 2; return DECIMAL;}
 {numero}+"."{numero}+			{yylval.entero = 5; return FLOTANTE;}
 "\""({caracter}|" "|{numero})*"\""	{yylval.entero = 4; return STRING;}
-{caracter}({caracter}|{numero})*	{yylval.cadena = strdup(yytext); return CONSTANTE;}
+{caracter}({caracter}|{numero})*	{yylval.cadena = strdup(yytext); return ID;}
 "\n" 					{ linea++; }
 [\t\r\f]				/* */
 " "					/* */
